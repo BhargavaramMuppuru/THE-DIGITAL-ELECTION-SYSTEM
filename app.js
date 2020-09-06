@@ -51,14 +51,19 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error', {
-		JWTData: req.JWTData
-	});
+    JWTData: req.JWTData
+  });
 });
 
 /**************************************MongoDB Database***************************************/
 var mongoURI = keyConfig.mongoURI;
 
-app.db = mongoose.createConnection(mongoURI);
+app.db = mongoose.createConnection(mongoURI, {
+  useUnifiedTopology: true,
+
+  useNewUrlParser: true
+
+});
 
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
 
@@ -66,7 +71,9 @@ app.db.once('open', function () {
   console.log("Connected to ", mongoURI);
 });
 
-import { models } from './model';
+import {
+  models
+} from './model';
 models(app, mongoose);
 
 /**************************************MongoDB Database***************************************/

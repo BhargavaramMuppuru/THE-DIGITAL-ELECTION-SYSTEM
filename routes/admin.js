@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var helper = require('./../helpers/helper');
 var keyConfig = require('./../config');
+const {
+	adminSchema
+} = require('../schema/Admin');
 
 router.get('/', function (req, res, next) {
 	if (req.JWTData.userType == 'admin') {
@@ -33,6 +36,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/login', function (req, res, next) {
 	if (req.JWTData.userType == 'admin') {
+		req.body
 		return res.redirect('/admin');
 	} else {
 		return res.render('login', {
@@ -46,7 +50,7 @@ router.get('/verifyvoter/:id', function (req, res, next) {
 
 		req.app.db.models.Voter.findById(req.params.id, function (err, data) {
 			if (err) {
-				console.log(data);
+				console.log(err);
 				return next(err);
 			}
 			data.isValid = true;
@@ -66,10 +70,12 @@ router.get('/logout', function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
+
 	console.log('Entered post /login');
 
 	req.app.db.models.Admin.findOne({
 		'login_id': req.body.login_id
+
 	}, function (err, data) {
 		if (err) {
 			console.log(err);
@@ -137,27 +143,9 @@ router.get('/create', function (req, res, next) {
 		})
 })
 
-// router.get('/createcandidate', function (req, res, next) {
-// 	req.app.db.models.Candidate.create({
-// 			"Rahul": "candidate-1",
-// 			"Arvind": "candidate-2",
-// 			"Narendra": "candidate-3",
-// 			"Rajnath": "candidate-4",
-// 			"Piyush": "candidate-5",
-// 			"Smriti": "candidate-6"
-// 		},
-// 		function (err, data) {
-// 			console.log(data)
-// 			console.log(err)
 
-// 			if (err) {
-// 				console.log(err);
-// 				return next(err);
-// 			}
 
-// 			return res.redirect('/admin');
 
-// 		})
-// })
+
 
 module.exports = router;

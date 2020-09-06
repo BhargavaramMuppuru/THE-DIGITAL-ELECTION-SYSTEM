@@ -1,6 +1,7 @@
 const schema = {
     name: String,
     constituency: String
+
 }
 
 export const getSchema = () => {
